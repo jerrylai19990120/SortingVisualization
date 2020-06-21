@@ -267,6 +267,7 @@ class Panel extends React.Component{
         let largest = i;
         let l = 2*i+1;
         let r = 2*i+2;
+        let cols = document.getElementsByClassName('column');
 
         if(l<n && numbers[i]<numbers[l]){
             largest = l;
@@ -277,22 +278,36 @@ class Panel extends React.Component{
 
         if(largest !== i){
             [numbers[i], numbers[largest]] = this.swap(numbers[i], numbers[largest]);
+            let temp = cols[i].style.height;
+            cols[i].style.height = cols[largest].style.height;
+            cols[largest].style.height = temp;
             this.heapify(numbers, n, largest);
         }
 
     }
 
-    heapSort(numbers){
+    async heapSort(numbers){
+
+        this.disableButtons();
         let size = numbers.length;
+        let cols = document.getElementsByClassName('column');
 
         for(let i=Math.floor(size/2-1);i>-1;i--){
             this.heapify(numbers, size, i);
         }
 
         for(let i=size-1; i>0;i--){
+            cols[i].style.backgroundColor = '#5FDA70';
+            await this.sleep(100);
             [numbers[i], numbers[0]] = this.swap(numbers[i], numbers[0]);
+            let temp = cols[i].style.height;
+            cols[i].style.height = cols[0].style.height;
+            cols[0].style.height = temp;
             this.heapify(numbers, i, 0);
         }
+
+        cols[0].style.backgroundColor = '#5FDA70';
+        this.enableButtons();
 
     }
 
@@ -339,7 +354,7 @@ class Panel extends React.Component{
 
     mergeSortCombine(numbers, start, end){
         const changes = [];
-        this.mergeSort(this.state.array, 0, 149, changes);
+        this.mergeSort(numbers, start, end, changes);
         this.mergeSortAnimation(changes);
     }
 
@@ -350,13 +365,59 @@ class Panel extends React.Component{
 
         const cols = [];
         
-        //const test = [];
-        
-        //this.mergeSort(this.state.array, 0, 149, test);
-        //this.mergeSort(this.state.array, 0, this.state.array.length-1, test);
 
         for(let i=0;i<this.state.array.length;i++){
             cols.push(<div key={i} className='column' style={{height: this.state.array[i], backgroundColor: this.state.color}}/>)
+        }
+
+        const changeSize = (value) => {
+            let cols = document.getElementsByClassName('column');
+            let val = value - this.state.array.length;
+
+            if(val>0){
+                let arr = this.state.array;
+                while(val>0){
+                    arr.push(this.randNum());
+                    val--;
+                }
+                this.setState({array: arr});
+                if(this.state.array.length<50){
+                    for(let i=0;i<cols.length;i++){
+                        cols[i].style.width = '12px';
+                    }
+                }else if(this.state.array.length>=50 && this.state.array.length<126){
+                    for(let i=0;i<cols.length;i++){
+                        cols[i].style.width = '6px';
+                    }
+                }else if(this.state.array.length>=126){
+                    for(let i=0;i<cols.length;i++){
+                        cols[i].style.width = '3px';
+                    }
+                }
+            }else if(val<0){
+                let arr = this.state.array;
+                while(val<0){
+                    arr.pop();
+                    val++;
+                }
+                this.setState({array: arr});
+                if(this.state.array.length<50){
+                    for(let i=0;i<cols.length;i++){
+                        cols[i].style.width = '12px';
+                    }
+                }else if(this.state.array.length>=50 && this.state.array.length<126){
+                    for(let i=0;i<cols.length;i++){
+                        cols[i].style.width = '6px';
+                    }
+                }else if(this.state.array.length>=126){
+                    for(let i=0;i<cols.length;i++){
+                        cols[i].style.width = '3px';
+                    }
+                }
+
+            }
+
+
         }
 
 
@@ -368,13 +429,13 @@ class Panel extends React.Component{
                 <Button type="primary" className="sort-click" onClick={()=> this.generateArray()} style={{backgroundColor:'#242F43', color:'#FFCB35', border:'1px solid #FFCB35'}}>Generate New Array</Button>
                 <Button type="primary" className="sort-click" onClick={()=> this.bubbleSort(this.state.array)} style={{backgroundColor:'#242F43', color:'#FFCB35', border:'1px solid #FFCB35'}}>Bubble Sort</Button>
                 <Button type="primary" className="sort-click" onClick={()=> this.selectionSort(this.state.array)} style={{backgroundColor:'#242F43', color:'#FFCB35', border:'1px solid #FFCB35'}}>Selection Sort</Button>
-                <Button type="primary" className="sort-click" onClick={()=> this.mergeSortCombine(this.state.array, 0, this.state.array.length)} style={{backgroundColor:'#242F43', color:'#FFCB35', border:'1px solid #FFCB35'}}>Merge Sort</Button>
+                <Button type="primary" className="sort-click" onClick={()=> this.mergeSortCombine(this.state.array, 0, this.state.array.length-1)} style={{backgroundColor:'#242F43', color:'#FFCB35', border:'1px solid #FFCB35'}}>Merge Sort</Button>
                 <Button type="primary" className="sort-click" onClick={()=> this.quickSort(this.state.array, 0, this.state.array.length-1)} style={{backgroundColor:'#242F43', color:'#FFCB35', border:'1px solid #FFCB35'}}>Quick Sort</Button>
                 <Button type="primary" className="sort-click" onClick={()=> this.heapSort(this.state.array)} style={{backgroundColor:'#242F43', color:'#FFCB35', border:'1px solid #FFCB35'}}>Heap Sort</Button>
                 <Button type="primary" className="sort-click" onClick={()=> this.insertionSort(this.state.array)} style={{backgroundColor:'#242F43', color:'#FFCB35', border:'1px solid #FFCB35'}}>Insertion Sort</Button>
-                <Slider defaultValue={100} style={{width: '88px', float: 'left', marginLeft:'20px', marginTop:'36px'}} onChange={()=>this.changeSize()}/>
+                <Slider defaultValue={150} style={{width: '88px', float: 'left', marginLeft:'20px', marginTop:'46px'}} onChange={changeSize} min={1} max={250}/>
                 </div>
-            <div className="cols_container" style={{float: 'left', marginTop: '100px', marginLeft:'226px'}}>
+            <div className="cols_container" style={{float: 'left', marginTop: '88px', marginLeft:'226px'}}>
 
                 {cols}
                 

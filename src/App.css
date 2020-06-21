@@ -36,3 +36,22 @@
     transform: rotate(360deg);
   }
 }
+
+.column{
+  width: 3px;
+  float: left;
+  margin-left: 1px;
+  transform: scaleX(-1);
+}
+
+.cols_container{
+  background-color: #4232EB;
+  width: 1100px;
+  height: 500px;
+}
+
+.sort-click{
+  float: left;
+  margin-left: 20px;
+  margin-top: 36px;
+}
