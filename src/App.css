@@ -21,3 +21,20 @@
   margin-left: 20px;
   margin-top: 36px;
 }
+
+.ant-slider-handle{
+  background-color: #FFCB35;
+  border: solid 3px #242F43;
+}
+
+.ant-slider-rail{
+  background-color: #242F43;
+}
+
+.ant-slider-track{
+  background-color: #FFCB35;
+}
+
+.ant-slider-handle.ant-tooltip-open{
+  border: #ffffff 3px solid;
+}
