@@ -41,7 +41,6 @@
   width: 3px;
   float: left;
   margin-left: 1px;
-  transform: scaleX(-1);
 }
 
 .cols_container{

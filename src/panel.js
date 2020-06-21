@@ -66,11 +66,12 @@ class Panel extends React.Component{
         this.setState({array: nums});
         this.setState({color: '#F646AB'});
         this.resetColors();
+        let cols = document.getElementsByClassName('column');
+        for(let i=0;i<cols.length;i++){
+            cols[i].style.width = '3px';
+        }
     }
 
-    changeSize(){
-
-    }
 
     componentDidMount(){
         this.generateArray();
@@ -165,7 +166,7 @@ class Panel extends React.Component{
         for(let j=low;j<high;j++){
             cols[j].style.backgroundColor = '#5FDA70';
             if(numbers[j]<pivot){
-                await this.sleep(66);
+                await this.sleep(16);
                 [numbers[j], numbers[i]] = this.swap(numbers[j], numbers[i]);
                 let temp = cols[j].style.height;
                 cols[j].style.height = cols[i].style.height;
@@ -176,7 +177,7 @@ class Panel extends React.Component{
                 i++; 
             }
         }
-        await this.sleep(36);
+        await this.sleep(9);
         [numbers[i], numbers[high]] = this.swap(numbers[i], numbers[high]);
         let temp = cols[high].style.height;
         cols[high].style.height = cols[i].style.height;
@@ -187,17 +188,21 @@ class Panel extends React.Component{
 
     async quickSort(numbers, low, high){
 
-        this.disableButtons();
-
         if(low<high){
 
             let pivotIndex = await this.partition(numbers, low, high);
-
-            this.quickSort(numbers, low, pivotIndex-1);
-            this.quickSort(numbers, pivotIndex+1, high);
+    
+            await this.quickSort(numbers, low, pivotIndex-1);
+            await this.quickSort(numbers, pivotIndex+1, high);
 
         }
 
+    }
+
+    async triggerQuickSort(numbers, low, high){
+        this.disableButtons();
+        await this.quickSort(numbers, low, high);
+        this.enableButtons();
     }
 
     mergeSort(numbers, start,  end, changes){
@@ -249,6 +254,7 @@ class Panel extends React.Component{
     }
 
     async mergeSortAnimation(changes){
+        this.disableButtons();
         await this.sleep();
         let columns = document.getElementsByClassName('column');
         for(let i=0;i<changes.length;i++){
@@ -257,6 +263,7 @@ class Panel extends React.Component{
             columns[index].style.height = `${value}px`;
             columns[index].style.backgroundColor = '#5FDA70';
         }
+        this.enableButtons();
     }
 
             
@@ -317,6 +324,8 @@ class Panel extends React.Component{
 
     async insertionSort(numbers){
 
+        this.disableButtons();
+
         for(let i=1;i<numbers.length;i++){
             let columns = document.getElementsByClassName('column');
             let minIndex = i;
@@ -348,7 +357,8 @@ class Panel extends React.Component{
                 cols[i].style.backgroundColor = '#5FDA70';
             }
         }
-
+        
+        this.enableButtons();
 
     }
 
@@ -420,6 +430,11 @@ class Panel extends React.Component{
 
         }
 
+        const getLength = () => {
+            return this.state.array.length;
+        }
+
+        
 
         
         return(
@@ -430,12 +445,12 @@ class Panel extends React.Component{
                 <Button type="primary" className="sort-click" onClick={()=> this.bubbleSort(this.state.array)} style={{backgroundColor:'#242F43', color:'#FFCB35', border:'1px solid #FFCB35'}}>Bubble Sort</Button>
                 <Button type="primary" className="sort-click" onClick={()=> this.selectionSort(this.state.array)} style={{backgroundColor:'#242F43', color:'#FFCB35', border:'1px solid #FFCB35'}}>Selection Sort</Button>
                 <Button type="primary" className="sort-click" onClick={()=> this.mergeSortCombine(this.state.array, 0, this.state.array.length-1)} style={{backgroundColor:'#242F43', color:'#FFCB35', border:'1px solid #FFCB35'}}>Merge Sort</Button>
-                <Button type="primary" className="sort-click" onClick={()=> this.quickSort(this.state.array, 0, this.state.array.length-1)} style={{backgroundColor:'#242F43', color:'#FFCB35', border:'1px solid #FFCB35'}}>Quick Sort</Button>
+                <Button type="primary" className="sort-click" onClick={()=> this.triggerQuickSort(this.state.array, 0, this.state.array.length-1)} style={{backgroundColor:'#242F43', color:'#FFCB35', border:'1px solid #FFCB35'}}>Quick Sort</Button>
                 <Button type="primary" className="sort-click" onClick={()=> this.heapSort(this.state.array)} style={{backgroundColor:'#242F43', color:'#FFCB35', border:'1px solid #FFCB35'}}>Heap Sort</Button>
                 <Button type="primary" className="sort-click" onClick={()=> this.insertionSort(this.state.array)} style={{backgroundColor:'#242F43', color:'#FFCB35', border:'1px solid #FFCB35'}}>Insertion Sort</Button>
-                <Slider defaultValue={150} style={{width: '88px', float: 'left', marginLeft:'20px', marginTop:'46px'}} onChange={changeSize} min={1} max={250}/>
+                <Slider id="slider" defaultValue={150} style={{width: '88px', float: 'left', marginLeft:'20px', marginTop:'46px'}} onChange={changeSize} min={1} max={250}/>
                 </div>
-            <div className="cols_container" style={{float: 'left', marginTop: '88px', marginLeft:'226px'}}>
+            <div className="cols_container" style={{float: 'left', marginTop: '54px', marginLeft:'226px', transform:'scaleY(-1)'}}>
 
                 {cols}
                 
