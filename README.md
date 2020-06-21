@@ -1,5 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Click this link to try out the visualizer: https://jerrylai19990120.github.io/SortingVisualization/
+
 ## Available Scripts
 
 In the project directory, you can run:
