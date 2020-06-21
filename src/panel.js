@@ -440,7 +440,7 @@ class Panel extends React.Component{
             }
         }
 
-        
+
         return(
 
             <div>
@@ -457,7 +457,7 @@ class Panel extends React.Component{
             <div className="cols_container" style={{float: 'left', marginTop: '54px', marginLeft:'226px', transform:'scaleY(-1)'}}>
 
                 {cols}
-                
+            
             </div>
             </div>
         );
