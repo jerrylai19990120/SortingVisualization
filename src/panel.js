@@ -59,7 +59,7 @@ class Panel extends React.Component{
     generateArray(){
         const nums = [];
         var rand;
-        for(let i=0;i<150;i++){
+        for(let i=0;i<160;i++){
             rand = this.randNum();
             nums.push(rand);
         }
@@ -430,11 +430,13 @@ class Panel extends React.Component{
 
         }
 
-        const getLength = () => {
-            return this.state.array.length;
-        }
 
-        
+        const refresh = () => {
+            let cols = document.getElementsByClassName('column');
+            for(let i=1;i<cols.length;i++){
+                cols[i].style.width = cols[0].style.width;
+            }
+        }
 
         
         return(
@@ -448,7 +450,7 @@ class Panel extends React.Component{
                 <Button type="primary" className="sort-click" onClick={()=> this.triggerQuickSort(this.state.array, 0, this.state.array.length-1)} style={{backgroundColor:'#242F43', color:'#FFCB35', border:'1px solid #FFCB35'}}>Quick Sort</Button>
                 <Button type="primary" className="sort-click" onClick={()=> this.heapSort(this.state.array)} style={{backgroundColor:'#242F43', color:'#FFCB35', border:'1px solid #FFCB35'}}>Heap Sort</Button>
                 <Button type="primary" className="sort-click" onClick={()=> this.insertionSort(this.state.array)} style={{backgroundColor:'#242F43', color:'#FFCB35', border:'1px solid #FFCB35'}}>Insertion Sort</Button>
-                <Slider id="slider" defaultValue={150} style={{width: '88px', float: 'left', marginLeft:'20px', marginTop:'46px'}} onChange={changeSize} min={1} max={250}/>
+                <Slider style={{width: '88px', float: 'left', marginLeft:'20px', marginTop:'46px'}} onChange={changeSize} min={1} max={250} onAfterChange={refresh} value={cols.length}/>
                 </div>
             <div className="cols_container" style={{float: 'left', marginTop: '54px', marginLeft:'226px', transform:'scaleY(-1)'}}>
 
